@@ -1,0 +1,68 @@
+<section class="form-shell">
+  <a class="back-link" routerLink="/"><span aria-hidden="true">←</span> Voltar para usuários</a>
+  <div class="form-heading">
+    <p class="eyebrow">CADASTROS <span>/</span> {{ editing ? 'EDIÇÃO' : 'NOVO' }}</p>
+    <h1>{{ editing ? 'Editar usuário' : 'Cadastrar usuário' }}</h1>
+    <p>{{ editing ? 'Atualize as informações do cadastro.' : 'Preencha os dados para adicionar uma pessoa.' }}</p>
+  </div>
+
+  <p class="feedback error" *ngIf="errorMessage()" role="alert">{{ errorMessage() }}</p>
+  <div class="loading-state" *ngIf="loading()" role="status">Carregando cadastro...</div>
+
+  <form *ngIf="!loading() && !errorMessage()" [formGroup]="form" (ngSubmit)="save()" novalidate>
+    <section class="form-section">
+      <div class="section-heading"><span>01</span><div><h2>Dados pessoais</h2><p>Informações de identificação</p></div></div>
+      <div class="fields-grid">
+        <label class="field full-width">
+          <span>Nome completo <b>*</b></span>
+          <input formControlName="name" autocomplete="name" placeholder="Ex.: Maria da Silva" [attr.aria-invalid]="form.controls.name.invalid && form.controls.name.touched" />
+          <small class="field-error" *ngIf="form.controls.name.invalid && form.controls.name.touched">Informe o nome completo.</small>
+        </label>
+        <label class="field">
+          <span>Documento</span>
+          <input formControlName="document" autocomplete="off" inputmode="numeric" maxlength="14" placeholder="000.000.000-00" [attr.aria-invalid]="form.controls.document.invalid && form.controls.document.touched" />
+          <small class="field-error" *ngIf="form.controls.document.invalid && form.controls.document.touched">Use 000.000.000-00 ou informe apenas os 11 dígitos.</small>
+        </label>
+        <label class="field">
+          <span>Data de nascimento</span>
+          <input type="date" formControlName="birthDate" autocomplete="bday" [attr.aria-invalid]="form.controls.birthDate.invalid && form.controls.birthDate.touched" />
+          <small class="field-error" *ngIf="form.controls.birthDate.invalid && form.controls.birthDate.touched">Informe uma data válida.</small>
+        </label>
+      </div>
+    </section>
+
+    <section class="form-section">
+      <div class="section-heading"><span>02</span><div><h2>Endereço</h2><p>Localização e contato postal</p></div></div>
+      <div class="fields-grid">
+        <label class="field address-field">
+          <span>Logradouro</span>
+          <input formControlName="addressLine" autocomplete="street-address" placeholder="Rua, avenida..." />
+        </label>
+        <label class="field number-field">
+          <span>Número</span>
+          <input type="number" min="0" formControlName="addressNumber" placeholder="Nº" />
+        </label>
+        <label class="field">
+          <span>Município</span>
+          <input formControlName="city" autocomplete="address-level2" placeholder="Cidade" />
+        </label>
+        <label class="field state-field">
+          <span>UF</span>
+          <input formControlName="state" autocomplete="address-level1" maxlength="2" placeholder="SP" />
+          <small class="field-error" *ngIf="form.controls.state.invalid">Use a sigla de 2 letras.</small>
+        </label>
+        <label class="field">
+          <span>CEP</span>
+          <input formControlName="zip" autocomplete="postal-code" placeholder="00000-000" />
+        </label>
+      </div>
+    </section>
+
+    <div class="form-actions">
+      <a class="secondary-button" routerLink="/">Cancelar</a>
+      <button class="primary-button" type="submit" [disabled]="saving()">
+        {{ saving() ? 'Salvando...' : editing ? 'Salvar alterações' : 'Cadastrar usuário' }}
+      </button>
+    </div>
+  </form>
+</section>

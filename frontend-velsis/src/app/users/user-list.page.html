@@ -1,0 +1,53 @@
+<section class="page-shell">
+  <div class="page-heading">
+    <div>
+      <p class="eyebrow">CADASTROS</p>
+      <h1>Usuários</h1>
+      <p class="description">Consulte e mantenha os dados das pessoas cadastradas.</p>
+    </div>
+    <a class="primary-button" routerLink="/usuarios/novo"><span aria-hidden="true">+</span> Cadastrar usuário</a>
+  </div>
+  <section class="directory" aria-label="Lista de usuários">
+    <div class="directory-toolbar">
+      <div>
+        <h2>Todos os usuários</h2>
+        <p>{{ users().length }} {{ users().length === 1 ? 'cadastro' : 'cadastros' }}</p>
+      </div>
+      <label class="search-box">
+        <span aria-hidden="true">⌕</span>
+        <input type="search" placeholder="Buscar por nome, documento ou cidade" [(ngModel)]="searchTerm" aria-label="Buscar usuários" />
+      </label>
+    </div>
+    <p class="feedback error" *ngIf="errorMessage()" role="alert">{{ errorMessage() }} <button type="button" class="text-button" (click)="loadUsers()">Tentar novamente</button></p>
+    <div class="loading-state" *ngIf="loading()" role="status">Carregando usuários...</div>
+    <div class="empty-state" *ngIf="!loading() && !errorMessage() && users().length === 0">
+      <span class="empty-mark" aria-hidden="true">V</span>
+      <h3>Nenhum usuário por aqui</h3>
+      <p>Cadastre a primeira pessoa para começar.</p>
+      <a routerLink="/usuarios/novo">Cadastrar usuário</a>
+    </div>
+    <div class="empty-state" *ngIf="!loading() && !errorMessage() && users().length > 0 && filteredUsers.length === 0">
+      <h3>Nenhum resultado</h3>
+      <p>Tente buscar por outro termo.</p>
+    </div>
+    <div class="table-wrap" *ngIf="!loading() && filteredUsers.length > 0">
+      <table>
+        <thead>
+          <tr><th>Nome</th><th>Documento</th><th>Município</th><th>UF</th><th class="actions-heading">Ações</th></tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of filteredUsers">
+            <td><span class="person-name">{{ user.name }}</span><span class="person-id">Cadastro #{{ user.id }}</span></td>
+            <td>{{ user.document || '—' }}</td>
+            <td>{{ user.city || '—' }}</td>
+            <td><span class="state-tag">{{ user.state || '—' }}</span></td>
+            <td class="row-actions">
+              <a class="icon-action" [routerLink]="['/usuarios', user.id, 'editar']" [attr.aria-label]="'Editar ' + user.name" title="Editar usuário"><span aria-hidden="true">↗</span></a>
+              <button class="icon-action delete-action" type="button" (click)="removeUser(user)" [attr.aria-label]="'Excluir ' + user.name" title="Excluir usuário"><span aria-hidden="true">×</span></button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</section>

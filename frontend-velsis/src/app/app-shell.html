@@ -1,0 +1,26 @@
+<header class="topbar">
+  <a class="brand" routerLink="/" aria-label="Velsis, página inicial">
+    <span class="brand-mark" aria-hidden="true">V</span>
+    <span>velsis<span class="brand-dot">.</span></span>
+  </a>
+  <nav aria-label="Navegação principal">
+    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Pessoas</a>
+    <a class="nav-create" routerLink="/usuarios/novo">+ Novo usuário</a>
+  </nav>
+</header>
+<main>
+  <router-outlet />
+</main>
+<footer>Velsis <span>·</span> Gestão de usuários</footer>
+<div
+  *ngIf="notifications.current() as notification"
+  class="toast"
+  [class.toast-success]="notification.kind === 'success'"
+  [class.toast-error]="notification.kind === 'error'"
+  role="status"
+  aria-live="polite"
+>
+  <span class="toast-icon" aria-hidden="true">{{ notification.kind === 'success' ? '✓' : '!' }}</span>
+  <span class="toast-message">{{ notification.message }}</span>
+  <button type="button" class="toast-close" aria-label="Fechar notificação" (click)="notifications.dismiss()">×</button>
+</div>
